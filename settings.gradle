@@ -1,1 +1,1 @@
-include ':patient', ':server', ':doctor', ':common'
+include ':patient', ':server', ':doctor', ':common', ':android_common'

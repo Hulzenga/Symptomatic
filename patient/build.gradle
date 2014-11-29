@@ -4,12 +4,19 @@ android {
     compileSdkVersion 21
     buildToolsVersion "19.1.0"
 
+    // needed to solve double packaging issue see:
+    // https://code.google.com/p/android/issues/detail?id=61573
+    packagingOptions {
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/NOTICE'
+    }
+
     defaultConfig {
-        applicationId "com.hulzenga.symptomatic"
+        applicationId "com.hulzenga.symptomatic.patient"
         minSdkVersion 15
         targetSdkVersion 21
         versionCode 1
-        versionName "1.0"
+        versionName "0.1"
     }
     buildTypes {
         release {
@@ -30,5 +37,9 @@ dependencies {
 
     compile 'com.squareup.retrofit:retrofit:1.7.1'
 
+    //not sure if needed
+    compile 'com.android.support:support-v13:21.0.+'
+
     compile project(':common')
+    compile project(':android_common')
 }

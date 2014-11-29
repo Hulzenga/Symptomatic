@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Symptomatic.iml" filepath="$PROJECT_DIR$/Symptomatic.iml" />
+      <module fileurl="file://$PROJECT_DIR$/android_common/android_common.iml" filepath="$PROJECT_DIR$/android_common/android_common.iml" />
       <module fileurl="file://$PROJECT_DIR$/common/common.iml" filepath="$PROJECT_DIR$/common/common.iml" />
       <module fileurl="file://$PROJECT_DIR$/doctor/doctor.iml" filepath="$PROJECT_DIR$/doctor/doctor.iml" />
       <module fileurl="file://$PROJECT_DIR$/patient/patient.iml" filepath="$PROJECT_DIR$/patient/patient.iml" />

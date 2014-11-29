@@ -1,6 +1,6 @@
 package com.hulzenga.symptomatic.server.repository;
 
-import com.hulzenga.symptomatic.model.checkin.CheckIn;
+import com.hulzenga.symptomatic.common.java.model.checkin.CheckIn;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

@@ -2,44 +2,51 @@
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:paddingBottom="@dimen/activity_vertical_margin"
                 android:paddingLeft="@dimen/activity_horizontal_margin"
                 android:paddingRight="@dimen/activity_horizontal_margin"
                 android:paddingTop="@dimen/activity_vertical_margin"
-                android:paddingBottom="@dimen/activity_vertical_margin"
-                tools:context="com.hulzenga.symptomatic.TestActivity">
+                tools:context="com.hulzenga.symptomatic.client.patient.activity.TestActivity">
 
-    <Button
+    <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Check In"
-        android:id="@+id/checkInButton"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"/>
+        android:layout_height="fill_parent"
+        android:layout_centerInParent="true"
+        android:orientation="vertical"
+        android:gravity="center">
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Get Symptoms"
-        android:id="@+id/symptomsButton"
-        android:layout_above="@+id/checkInButton"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignRight="@+id/checkInButton"
-        android:layout_alignEnd="@+id/checkInButton"/>
+        <Button
+            android:id="@+id/testDownloadPatientDataButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:text="Download Patient Data"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="NOTHING LOADED YET"
-        android:id="@+id/symptomsTextView"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_above="@+id/symptomsButton"
-        android:layout_alignRight="@+id/symptomsButton"
-        android:layout_alignEnd="@+id/symptomsButton"/>
+        <Button
+            android:id="@+id/testLoginButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/testSchedulerButton"
+            android:layout_alignRight="@+id/testSchedulerButton"
+            android:layout_centerVertical="true"
+            android:text="Login"/>
+
+        <Button
+            android:id="@+id/testCheckInButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/testLoginButton"
+            android:layout_centerHorizontal="true"
+            android:text="CheckIn"/>
+
+        <Button
+            android:id="@+id/testSchedulerButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/testCheckInButton"
+            android:layout_centerHorizontal="true"
+            android:text="Scheduler"/>
+    </LinearLayout>
+
 </RelativeLayout>

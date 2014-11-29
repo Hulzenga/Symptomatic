@@ -22,7 +22,7 @@ public class User implements UserDetails{
 
   private String username;
   private String password;
-  private String salt;
+  //private String salt;
 
   private final Collection<GrantedAuthority> authorities;
   private UserType type;

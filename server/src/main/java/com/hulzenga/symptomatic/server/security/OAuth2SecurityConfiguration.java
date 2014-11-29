@@ -1,5 +1,7 @@
 package com.hulzenga.symptomatic.server.security;
 
+import com.hulzenga.symptomatic.common.java.api.ServerSettings;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,6 +33,7 @@ public class OAuth2SecurityConfiguration {
 
   @Configuration
   @EnableWebSecurity
+  @Order(Ordered.LOWEST_PRECEDENCE)
   protected static class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -61,6 +64,9 @@ public class OAuth2SecurityConfiguration {
           .authorizeRequests()
           .antMatchers("/patient/**").hasAuthority(AUTH_PATIENT);
 
+      http
+          .authorizeRequests()
+          .antMatchers("/doctor/**").hasAuthority(AUTH_DOCTOR);
 //      http
 //          .authorizeRequests()
 //          .antMatchers("/patient/**")
@@ -71,9 +77,8 @@ public class OAuth2SecurityConfiguration {
 
   @Configuration
   @EnableAuthorizationServer
-  @Order(Ordered.LOWEST_PRECEDENCE - 100)
-  protected static class OAuth2Config extends
-      AuthorizationServerConfigurerAdapter {
+  @Order(Ordered.LOWEST_PRECEDENCE + 100)
+  protected static class OAuth2Config extends AuthorizationServerConfigurerAdapter {
 
     // Delegate the processing of Authentication requests to the framework
     @Autowired
@@ -82,42 +87,24 @@ public class OAuth2SecurityConfiguration {
     // A data structure used to store both a ClientDetailsService and a UserDetailsService
     private ClientAndUserDetailsService combinedService_;
 
-    /**
-     * This constructor is used to setup the clients and users that will be able to login to the
-     * system. This is a VERY insecure setup that is using hard-coded lists of clients / users /
-     * passwords and should never be used for anything other than local testing
-     * on a machine that is not accessible via the Internet. Even if you use
-     * this code for testing, at the bare minimum, you should consider changing the
-     * passwords listed below and updating the VideoSvcClientApiTest.
-     *
-     * @throws Exception
-     */
     public OAuth2Config() throws Exception {
 
-      // If you were going to reuse this class in another
-      // application, this is one of the key sections that you
-      // would want to change
-
-
-      // Create a service that has the credentials for all our clients
       ClientDetailsService csvc = new InMemoryClientDetailsServiceBuilder()
-          // Create a client that has "read" and "write" access to the
-          // video service
-          .withClient("mobile").authorizedGrantTypes("password")
-          .authorities("ROLE_CLIENT", "ROLE_TRUSTED_CLIENT")
-          .scopes("read", "write").resourceIds("video")
-          .and()
-              // Create a second client that only has "read" access to the
-              // video service
-          .withClient("mobileReader").authorizedGrantTypes("password")
-          .authorities("ROLE_CLIENT")
-          .scopes("read").resourceIds("video")
-          .accessTokenValiditySeconds(3600).and().build();
+          .withClient(ServerSettings.PATIENT_CLIENT).secret(ServerSettings.PATIENT_CLIENT_SECRET)
+          .authorizedGrantTypes("password")
+          .authorities(AUTH_PATIENT)
+          .scopes("check-in", "get_own_data")
+          .accessTokenValiditySeconds(Integer.MAX_VALUE).and().build();
+
+//      UserDetailsService svc = new InMemoryUserDetailsManager(
+//          Arrays.asList(
+//              User.create(User.UserType.PATIENT, "alice", "ecila", AUTH_DOCTOR),
+//              User.create(User.UserType.PATIENT, "bob", "bob", AUTH_PATIENT)));
 
       UserDetailsService svc = new InMemoryUserDetailsManager(
           Arrays.asList(
-              User.create(User.UserType.PATIENT, "alice", "ecila", AUTH_DOCTOR),
-              User.create(User.UserType.PATIENT, "bob", "bob", AUTH_PATIENT)));
+              User2.create("admin", "pass", "ADMIN", "USER"),
+              User2.create("user0", "pass", "USER")));
 
       // Since clients have to use BASIC authentication with the client's id/secret,
       // when sending a request for a password grant, we make each client a user

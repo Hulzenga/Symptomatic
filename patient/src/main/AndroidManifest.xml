@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.hulzenga.symptomatic" >
+    package="com.hulzenga.symptomatic.client.patient" >
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -10,14 +10,23 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="com.hulzenga.symptomatic.client.patient.activity.TestActivity"
-            android:label="@string/title_activity_test" >
-            <intent-filter>
+            android:name="com.hulzenga.symptomatic.client.patient.activity.PatientSignInActivity"
+            android:label="@string/title_activity_login" >
+            <intent-filter android:label="@string/app_name" >
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <!--<activity-->
+            <!--android:name="com.hulzenga.symptomatic.client.patient.activity.TestActivity"-->
+            <!--android:label="@string/title_activity_test" >-->
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
+
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
+        <!--</activity>-->
         <activity
             android:name="com.hulzenga.symptomatic.client.patient.activity.CheckInActivity"
             android:label="@string/title_activity_check_in" >
@@ -26,10 +35,12 @@
             android:name="com.hulzenga.symptomatic.client.patient.activity.ScheduleCheckInsActivity"
             android:label="@string/title_activity_schedule_check_ins" >
         </activity>
-        <activity
-            android:name="com.hulzenga.symptomatic.client.patient.activity.LoginActivity"
-            android:label="@string/title_activity_login" >
-        </activity>
+
+        <receiver
+            android:name="com.hulzenga.symptomatic.client.patient.receivers.ReminderReceiver"
+            android:enabled="true"
+            android:exported="false" >
+        </receiver>
     </application>
 
 </manifest>

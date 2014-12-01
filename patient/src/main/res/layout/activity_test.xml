@@ -24,6 +24,14 @@
             android:text="Download Patient Data"/>
 
         <Button
+            android:id="@+id/testReminder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:text="Fire Reminder now!"/>
+
+        <Button
             android:id="@+id/testLoginButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

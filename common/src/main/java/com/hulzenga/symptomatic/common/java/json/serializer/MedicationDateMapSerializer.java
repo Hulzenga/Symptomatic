@@ -4,8 +4,6 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
-import com.hulzenga.symptomatic.common.java.model.checkin.Symptom;
-import com.hulzenga.symptomatic.common.java.model.checkin.SymptomState;
 import com.hulzenga.symptomatic.common.java.model.medication.Medication;
 
 import java.io.IOException;

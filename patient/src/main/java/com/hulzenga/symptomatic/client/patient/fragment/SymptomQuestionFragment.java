@@ -1,20 +1,13 @@
 package com.hulzenga.symptomatic.client.patient.fragment;
 
-import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 
-import com.hulzenga.symptomatic.client.patient.data.DataManager;
 import com.hulzenga.symptomatic.common.java.model.checkin.Symptom;
 import com.hulzenga.symptomatic.common.java.model.checkin.SymptomState;
-
-import java.util.Map;
 
 /**
  * Created by jouke on 11/26/14.

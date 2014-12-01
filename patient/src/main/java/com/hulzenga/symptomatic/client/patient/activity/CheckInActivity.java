@@ -4,8 +4,8 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.support.v13.app.FragmentPagerAdapter;
 import android.os.Bundle;
+import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v13.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
@@ -15,11 +15,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.hulzenga.symptomatic.R;
-import com.hulzenga.symptomatic.client.patient.data.DataManager;
+import com.hulzenga.symptomatic.client.patient.R;
 import com.hulzenga.symptomatic.client.patient.fragment.CheckInQuestionFragment;
 import com.hulzenga.symptomatic.client.patient.fragment.MedicationQuestionFragment;
 import com.hulzenga.symptomatic.client.patient.fragment.SymptomQuestionFragment;
+import com.hulzenga.symptomatic.client.patient.manager.DataManager;
+import com.hulzenga.symptomatic.client.patient.manager.SignInManager;
+import com.hulzenga.symptomatic.common.android.util.ControlFlow;
 import com.hulzenga.symptomatic.common.android.view.SlidingTabLayout;
 import com.hulzenga.symptomatic.common.java.model.checkin.CheckIn;
 import com.hulzenga.symptomatic.common.java.model.checkin.Symptom;
@@ -36,7 +38,7 @@ import butterknife.OnClick;
 
 public class CheckInActivity extends Activity implements CheckInQuestionFragment.CheckInPresenter {
 
-  final static String TAG = "CheckInActivity";
+  final static String TAG = CheckInActivity.class.getSimpleName();
   final static String CHECK_IN_KEY = "check_in_key";
 
   private CheckIn mCheckIn;
@@ -50,7 +52,9 @@ public class CheckInActivity extends Activity implements CheckInQuestionFragment
 
   @OnClick(R.id.submitCheckInButton)
   public void checkIn() {
-    DataManager.checkIn(mCheckIn);
+    DataManager.checkIn(this, mCheckIn);
+    Toast.makeText(this, "Thank you for Checking-In", Toast.LENGTH_SHORT).show();
+    finish();
   }
 
   @InjectView(R.id.checkInPager)
@@ -73,13 +77,14 @@ public class CheckInActivity extends Activity implements CheckInQuestionFragment
     super.onCreate(savedInstanceState);
 
     //first check if patient data is available, if not quit immediately
-    if (DataManager.loadPatientData(this)) {
-      nSymptoms = DataManager.getPatientData().getSymptoms().size();
-      nMedications = DataManager.getPatientData().getMedications().size();
+    if (DataManager.getPatientData(this) != null) {
+      nSymptoms = DataManager.getPatientData(this).getSymptoms().size();
+      nMedications = DataManager.getPatientData(this).getMedications().size();
     } else {
       //this should never happen
-      Toast.makeText(this, "Patient data is not available", Toast.LENGTH_LONG);
+      Toast.makeText(this, "Patient data is not available", Toast.LENGTH_LONG).show();
       Log.e(TAG, "Patient data is not available");
+      finish();
       return;
     }
 
@@ -107,11 +112,10 @@ public class CheckInActivity extends Activity implements CheckInQuestionFragment
     mSlidingTabLayout.setViewPager(mViewPager);
   }
 
-
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
     // Inflate the menu; this adds items to the action bar if it is present.
-    getMenuInflater().inflate(R.menu.menu_check_in, menu);
+    getMenuInflater().inflate(R.menu.menu, menu);
     return true;
   }
 
@@ -123,8 +127,9 @@ public class CheckInActivity extends Activity implements CheckInQuestionFragment
     int id = item.getItemId();
 
     //noinspection SimplifiableIfStatement
-    if (id == R.id.action_settings) {
-      return true;
+    if (id == R.id.action_sign_out) {
+      SignInManager.signOut(this);
+      ControlFlow.redirect(this, PatientSignInActivity.class);
     }
 
     return super.onOptionsItemSelected(item);
@@ -193,26 +198,28 @@ public class CheckInActivity extends Activity implements CheckInQuestionFragment
     @Override
     public Fragment getItem(int position) {
       if (position < nSymptoms) {
-        return SymptomQuestionFragment.newInstance(DataManager.getPatientData()
-            .getSymptoms().get(position));
+        return SymptomQuestionFragment.newInstance(DataManager
+            .getPatientData(getApplicationContext()).getSymptoms().get(position));
       } else {
-        return MedicationQuestionFragment.newInstance(DataManager.getPatientData()
-            .getMedications().get(position - nSymptoms));
+        return MedicationQuestionFragment.newInstance(DataManager
+            .getPatientData(getApplicationContext()).getMedications().get(position - nSymptoms));
       }
     }
 
     @Override
     public int getCount() {
-      return DataManager.getPatientData().getSymptoms().size() +
-          DataManager.getPatientData().getMedications().size();
+      return DataManager.getPatientData(getApplicationContext()).getSymptoms().size() +
+          DataManager.getPatientData(getApplicationContext()).getMedications().size();
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
       if (position < nSymptoms) {
-        return DataManager.getPatientData().getSymptoms().get(position).getDescriptor();
+        return DataManager.getPatientData(getApplicationContext())
+            .getSymptoms().get(position).getDescriptor();
       } else {
-        return DataManager.getPatientData().getMedications().get(position - nSymptoms).getName();
+        return DataManager.getPatientData(getApplicationContext())
+            .getMedications().get(position - nSymptoms).getName();
       }
     }
   }

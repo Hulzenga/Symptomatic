@@ -7,12 +7,22 @@ repositories {
 dependencies {
     compile 'com.squareup.retrofit:retrofit:1.7.1'
     compile 'org.hibernate.javax.persistence:hibernate-jpa-2.0-api:1.0.1.Final'
+
+    //apache libraries
     compile 'commons-net:commons-net:3.3'
+    compile "commons-io:commons-io:2.4"
+    compile 'org.apache.httpcomponents:httpclient:4.3.6'
+    compile 'org.apache.httpcomponents:fluent-hc:4.3.6'
+    compile 'org.apache.oltu.oauth2:org.apache.oltu.oauth2.client:1.0.0'
+
+
+    //Guava
+    compile 'com.google.guava:guava:18.0'
+
     //Jackson
-    //    compile('org.codehaus.jackson:jackson-core-asl:1.9.13')
-    //    compile('com.fasterxml.jackson.core:jackson-annotations:2.4.3')
     compile 'com.fasterxml.jackson.core:jackson-databind:2.4.3'
     compile 'com.squareup.retrofit:converter-jackson:1.7.1'
+
 
     testCompile 'junit:junit:4.11'
 }

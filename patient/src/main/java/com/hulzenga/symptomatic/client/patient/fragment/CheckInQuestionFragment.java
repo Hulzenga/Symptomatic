@@ -10,11 +10,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 
-import com.hulzenga.symptomatic.R;
-import com.hulzenga.symptomatic.common.java.model.checkin.CheckIn;
+import com.hulzenga.symptomatic.client.patient.R;
 import com.hulzenga.symptomatic.common.java.model.checkin.Symptom;
 import com.hulzenga.symptomatic.common.java.model.checkin.SymptomState;
 import com.hulzenga.symptomatic.common.java.model.medication.Medication;

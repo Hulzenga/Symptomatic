@@ -1,9 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.hulzenga.symptomatic">
+    package="com.hulzenga.symptomatic.client.doctor" >
 
-    <application android:allowBackup="true" android:label="@string/app_name"
-        android:icon="@drawable/ic_launcher" android:theme="@style/AppTheme">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/doctor_app_name"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name="com.hulzenga.symptomatic.client.doctor.activity.DoctorSignInActivity"
+            android:label="@string/title_activity_doctor_sign_in" >
+            <intent-filter android:label="@string/doctor_app_name" >
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <service
+            android:name="com.hulzenga.symptomatic.client.doctor.service.TokenService"
+            android:enabled="true"
+            android:exported="false" >
+        </service>
+
+        <activity
+            android:name=".activity.PatientDetailsActivity"
+            android:label="@string/title_activity_patient_details" >
+        </activity>
+        <activity
+            android:name=".activity.PatientMonitorActivity"
+            android:label="@string/title_activity_patient_monitor" >
+        </activity>
     </application>
 
 </manifest>

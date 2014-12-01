@@ -2,10 +2,20 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 21
-    buildToolsVersion "19.1.0"
+    buildToolsVersion "21.1.1"
+
+    // needed to solve double packaging issue see:
+    // https://code.google.com/p/android/issues/detail?id=61573
+    packagingOptions {
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/DEPENDENCIES'
+    }
 
     defaultConfig {
-        applicationId "com.hulzenga.symptomatic"
+        applicationId "com.hulzenga.symptomatic.client.doctor"
         minSdkVersion 15
         targetSdkVersion 21
         versionCode 1
@@ -21,4 +31,21 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
+
+    //Jackson converter for symmetry with the Spring backend and handling Jackson annotations
+    compile 'com.squareup.retrofit:converter-jackson:1.7.1'
+
+    //Guava
+    compile 'com.google.guava:guava:18.0'
+
+    //butterknife
+    compile 'com.jakewharton:butterknife:6.0.0'
+
+    compile 'com.squareup.retrofit:retrofit:1.7.1'
+
+    //not sure if needed
+    compile 'com.android.support:support-v13:21.0.+'
+
+    compile project(':common')
+    compile project(':android_common')
 }

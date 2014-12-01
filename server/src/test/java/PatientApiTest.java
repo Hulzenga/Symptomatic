@@ -1,22 +1,18 @@
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hulzenga.symptomatic.common.java.api.APIFactory;
 import com.hulzenga.symptomatic.common.java.api.PatientApi;
-import com.hulzenga.symptomatic.common.java.json.SymptomaticModule;
 import com.hulzenga.symptomatic.common.java.model.checkin.CheckIn;
 import com.hulzenga.symptomatic.common.java.model.checkin.Symptom;
 import com.hulzenga.symptomatic.common.java.model.checkin.SymptomState;
 import com.hulzenga.symptomatic.common.java.model.convenience.PatientData;
 import com.hulzenga.symptomatic.common.java.model.medication.Medication;
+import com.hulzenga.symptomatic.common.java.network.APIFactory;
+import com.hulzenga.symptomatic.common.java.network.ServerSettings;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
-import java.io.IOException;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import retrofit.RetrofitError;
@@ -26,8 +22,16 @@ import retrofit.RetrofitError;
  */
 public class PatientApiTest {
 
-  private PatientApi patientApi = APIFactory.makePatientApi();
+  private String token;
 
+  private PatientApi patientApi;
+
+  @Before
+  public void init() {
+    token = APIFactory.signIn(ServerSettings.PATIENT_CLIENT,
+        ServerSettings.PATIENT_CLIENT_SECRET, "Bob", "Bob");
+    patientApi = APIFactory.makePatientAPI(token);
+  }
   @Test
   public void getSymptomsTest() {
     Assert.assertNotNull(patientApi.getSymptoms());
@@ -60,7 +64,6 @@ public class PatientApiTest {
     }
 
     CheckIn checkIn = new CheckIn(new Date(System.currentTimeMillis()), symptomStateMap, medicationDateMap);
-
 
     try {
       patientApi.checkIn(checkIn);

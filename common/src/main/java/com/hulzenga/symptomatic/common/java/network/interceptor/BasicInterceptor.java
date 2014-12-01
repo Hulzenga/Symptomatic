@@ -16,8 +16,6 @@ public class BasicInterceptor implements RequestInterceptor {
   public BasicInterceptor(String user, String password) {
     this.user = user;
     this.password = password;
-
-
   }
 
   @Override

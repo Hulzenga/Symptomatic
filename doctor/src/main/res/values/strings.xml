@@ -1,3 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Symptomatic</string>
+
+    <string name="doctor_app_name">Patient Monitor</string>
+    <string name="title_activity_doctor_sign_in">Sign In</string>
+    <string name="action_settings">Sign Out</string>
+    <string name="title_activity_patient_details">Patient Details</string>
+    <string name="title_activity_patient_monitor">Patient Monitor</string>
+
 </resources>

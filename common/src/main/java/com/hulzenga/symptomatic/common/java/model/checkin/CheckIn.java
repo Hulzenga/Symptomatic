@@ -8,7 +8,6 @@ import com.hulzenga.symptomatic.common.java.json.serializer.MedicationDateMapSer
 import com.hulzenga.symptomatic.common.java.json.serializer.SymptomStateMapSerializer;
 import com.hulzenga.symptomatic.common.java.model.medication.Medication;
 
-
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Map;
@@ -18,13 +17,14 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 
 /**
  * Created by jouke on 11/8/14.
  * (implements Serializable for Android save instance state, no other use intended)
  */
 @Entity
-public class CheckIn implements Serializable{
+public class CheckIn implements Serializable, Comparable<CheckIn>{
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -38,7 +38,7 @@ public class CheckIn implements Serializable{
 
   @JsonSerialize(using = SymptomStateMapSerializer.class)
   @JsonDeserialize(using = SymptomStateMapDeserializer.class)
-  @ElementCollection
+  @ManyToMany
   private Map<Symptom, SymptomState> checkedSymptomStates;
 
   /**
@@ -92,5 +92,15 @@ public class CheckIn implements Serializable{
     this.checkInDate = checkInDate;
     this.checkedSymptomStates = checkedSymptomStates;
     this.medicationsTaken = medicationsTaken;
+  }
+
+  /**
+   * sorts by date, with more recent dates having a "lower" value
+   * @param another
+   * @return
+   */
+  @Override
+  public int compareTo(CheckIn another) {
+    return Long.signum(another.getCheckInDate().getTime() - checkInDate.getTime());
   }
 }

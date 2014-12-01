@@ -6,11 +6,13 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.hulzenga.symptomatic.R;
+import com.hulzenga.symptomatic.client.patient.R;
+import com.hulzenga.symptomatic.client.patient.manager.DataManager;
+import com.hulzenga.symptomatic.client.patient.manager.ScheduleManager;
 import com.hulzenga.symptomatic.common.java.api.PatientApi;
-import com.hulzenga.symptomatic.client.patient.data.DataManager;
 import com.hulzenga.symptomatic.common.java.model.checkin.Symptom;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -43,9 +45,15 @@ public class TestActivity extends Activity {
     });
   }
 
+  @OnClick(R.id.testReminder)
+  public void doReminder() {
+    ScheduleManager.updateReminders(this, 0, new Date(System.currentTimeMillis() + 4000l));
+    ScheduleManager.scheduleReminders(this);
+  }
+
   @OnClick(R.id.testLoginButton)
   public void login() {
-    Intent intent = new Intent(TestActivity.this, LoginActivity.class);
+    Intent intent = new Intent(TestActivity.this, PatientSignInActivity.class);
     startActivity(intent);
   }
 
@@ -85,7 +93,7 @@ public class TestActivity extends Activity {
     int id = item.getItemId();
 
     //noinspection SimplifiableIfStatement
-    if (id == R.id.action_settings) {
+    if (id == R.id.action_sign_out) {
       return true;
     }
 

@@ -44,6 +44,10 @@ dependencies {
     //Jackson converter for symmetry with the Spring backend and handling Jackson annotations
     compile 'com.squareup.retrofit:converter-jackson:1.7.1'
 
+    //Guava
+    compile 'com.google.guava:guava:18.0'
+
+
     testCompile("junit:junit")
 
     compile project(':common')

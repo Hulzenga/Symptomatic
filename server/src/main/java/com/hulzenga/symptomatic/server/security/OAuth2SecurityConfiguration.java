@@ -1,8 +1,9 @@
 package com.hulzenga.symptomatic.server.security;
 
-import com.hulzenga.symptomatic.common.java.api.ServerSettings;
+import com.hulzenga.symptomatic.common.java.network.ServerSettings;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
@@ -33,17 +34,20 @@ public class OAuth2SecurityConfiguration {
 
   @Configuration
   @EnableWebSecurity
-  @Order(Ordered.LOWEST_PRECEDENCE)
   protected static class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private UserDetailsService userDetailsService;
 
     @Autowired
-    protected void registerAuthentication(
-        final AuthenticationManagerBuilder auth) throws Exception {
-
+    protected void registerAuthentication(final AuthenticationManagerBuilder auth) throws Exception {
       auth.userDetailsService(userDetailsService);
+    }
+
+    @Override
+    @Bean(name = "authenticationManagerBean")
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+      return super.authenticationManagerBean();
     }
   }
 
@@ -67,21 +71,19 @@ public class OAuth2SecurityConfiguration {
       http
           .authorizeRequests()
           .antMatchers("/doctor/**").hasAuthority(AUTH_DOCTOR);
-//      http
-//          .authorizeRequests()
-//          .antMatchers("/patient/**")
-//          .hasAuthority(AUTH_PATIENT);
-
     }
   }
 
+
+
   @Configuration
   @EnableAuthorizationServer
-  @Order(Ordered.LOWEST_PRECEDENCE + 100)
+  @Order(Ordered.LOWEST_PRECEDENCE - 100)
   protected static class OAuth2Config extends AuthorizationServerConfigurerAdapter {
 
     // Delegate the processing of Authentication requests to the framework
     @Autowired
+    @Qualifier("authenticationManagerBean")
     private AuthenticationManager authenticationManager;
 
     // A data structure used to store both a ClientDetailsService and a UserDetailsService
@@ -94,17 +96,20 @@ public class OAuth2SecurityConfiguration {
           .authorizedGrantTypes("password")
           .authorities(AUTH_PATIENT)
           .scopes("check-in", "get_own_data")
-          .accessTokenValiditySeconds(Integer.MAX_VALUE).and().build();
-
-//      UserDetailsService svc = new InMemoryUserDetailsManager(
-//          Arrays.asList(
-//              User.create(User.UserType.PATIENT, "alice", "ecila", AUTH_DOCTOR),
-//              User.create(User.UserType.PATIENT, "bob", "bob", AUTH_PATIENT)));
+          .accessTokenValiditySeconds(Integer.MAX_VALUE)
+          .and()
+          .withClient(ServerSettings.DOCTOR_CLIENT).secret(ServerSettings.DOCTOR_CLIENT_SECRET)
+          .authorizedGrantTypes("password")
+          .authorities(AUTH_PATIENT)
+          .scopes("monitor_patients", "change_medication")
+          .accessTokenValiditySeconds(ServerSettings.DOCTOR_TOKEN_TIME).and().build();
 
       UserDetailsService svc = new InMemoryUserDetailsManager(
           Arrays.asList(
-              User2.create("admin", "pass", "ADMIN", "USER"),
-              User2.create("user0", "pass", "USER")));
+              User.create(User.UserType.PATIENT, ServerSettings.DOCTOR_USERNAME,
+                  ServerSettings.DOCTOR_USERNAME, AUTH_DOCTOR),
+              User.create(User.UserType.PATIENT, ServerSettings.PATIENT_USERNAME,
+                  ServerSettings.PATIENT_USERNAME, AUTH_PATIENT)));
 
       // Since clients have to use BASIC authentication with the client's id/secret,
       // when sending a request for a password grant, we make each client a user
@@ -150,6 +155,7 @@ public class OAuth2SecurityConfiguration {
 
       clients.withClientDetails(clientDetailsService());
     }
-
   }
+
+
 }

@@ -1,15 +1,17 @@
 package com.hulzenga.symptomatic.server;
 
 import com.fasterxml.jackson.databind.Module;
-import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.hulzenga.symptomatic.common.java.json.SymptomaticModule;
-import com.hulzenga.symptomatic.common.java.json.serializer.SymptomStateMapSerializer;
 
-import org.h2.server.web.DbStarter;
-import org.h2.server.web.WebServlet;
+import org.apache.catalina.connector.Connector;
+import org.apache.coyote.http11.Http11NioProtocol;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.context.embedded.ServletRegistrationBean;
+import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletContainer;
+import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
+import org.springframework.boot.context.embedded.tomcat.TomcatConnectorCustomizer;
+import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
 import org.springframework.boot.orm.jpa.EntityScan;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -17,7 +19,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import java.util.Map;
+import java.io.File;
 
 
 /**
@@ -25,7 +27,7 @@ import java.util.Map;
  */
 @EnableAutoConfiguration
 @Configuration()
-@EnableWebMvc //todo remove don't think needed
+@EnableWebMvc
 @ComponentScan
 @EntityScan("com.hulzenga.symptomatic.common.java.model")
 public class Application {
@@ -41,14 +43,37 @@ public class Application {
     ConfigurableApplicationContext context = app.run(args);
   }
 
-
-  @Bean
-  public ServletRegistrationBean console() {
-    DbStarter starter = new DbStarter();
-    starter.getConnection();
-
-    return new ServletRegistrationBean(new WebServlet(), "/console");
-  }
+//  @Bean
+//  EmbeddedServletContainerCustomizer containerCustomizer(
+//      @Value("${keystore.file:src/main/resources/private/keystore}") String keystoreFile,
+//      @Value("${keystore.pass:changeit}") final String keystorePass) throws Exception {
+//
+//    final String absoluteKeystoreFile = new File(keystoreFile).getAbsolutePath();
+//
+//    return new EmbeddedServletContainerCustomizer() {
+//
+//      @Override
+//      public void customize(ConfigurableEmbeddedServletContainer container) {
+//        TomcatEmbeddedServletContainerFactory tomcat = (TomcatEmbeddedServletContainerFactory) container;
+//        tomcat.addConnectorCustomizers(
+//            new TomcatConnectorCustomizer() {
+//              @Override
+//              public void customize(Connector connector) {
+//                connector.setPort(8443);
+//                connector.setSecure(true);
+//                connector.setScheme("https");
+//
+//                Http11NioProtocol proto = (Http11NioProtocol) connector.getProtocolHandler();
+//                proto.setSSLEnabled(true);
+//                proto.setKeystoreFile(absoluteKeystoreFile);
+//                proto.setKeystorePass(keystorePass);
+//                proto.setKeystoreType("JKS");
+//                proto.setKeyAlias("tomcat");
+//              }
+//            });
+//      }
+//    };
+//  }
 
   @Bean
   public Module customJacksonModule() {

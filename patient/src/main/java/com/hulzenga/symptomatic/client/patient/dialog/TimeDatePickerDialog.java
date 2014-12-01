@@ -12,7 +12,7 @@ import android.view.View;
 import android.widget.NumberPicker;
 import android.widget.TimePicker;
 
-import com.hulzenga.symptomatic.R;
+import com.hulzenga.symptomatic.client.patient.R;
 
 import java.util.Calendar;
 import java.util.Date;
